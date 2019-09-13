@@ -78,11 +78,10 @@ namespace EFCoreSample
 
         private async Task ReadBooksAsync()
         {
-            using (var context = new BooksContext())
+            using (BooksContext context = new BooksContext())
             {
                 List<Book> books = await context.Books.ToListAsync();
-                //context.Log = Response.Output;
-                //Console.WriteLine(context.GetType);
+
                 foreach (var b in books)
                 {
                     Console.WriteLine($"{b.Title} {b.Publisher}");
