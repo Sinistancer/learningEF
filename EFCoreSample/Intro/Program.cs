@@ -5,22 +5,26 @@ using System.Threading.Tasks;
 using EFCoreSample.BooksSample;
 using EFCoreSample.Intro;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 
 namespace EFCoreSample
 {
     class Program
     {
-        static async Task Main()
-        {
-            Program p = new Program();
-            await p.CreateTheDatabaseAsync();
-            await p.AddBookAsync("Professional C# 7", "Wrox Press");
-            await p.AddBooksAsync();
-            await p.ReadBooksAsync();
-            await p.QueryBooksAsync();
-            //await p.DeleteDatabaseAsync();
+        //static async Task Main()
+        //{
+        //    var p = new Program();
+        //    //p.AddLogging();
+        //    await p.CreateTheDatabaseAsync();
+        //    //await p.AddBookAsync("Professional C# 7", "Wrox Press");
+        //    //await p.AddBooksAsync();
+        //    //await p.ReadBooksAsync();
+        //    //await p.QueryBooksAsync();
+        //    //await p.DeleteDatabaseAsync();
 
-        }
+        //}
 
         private async Task CreateTheDatabaseAsync()
         {
@@ -109,6 +113,16 @@ namespace EFCoreSample
                 }
             }
             Console.WriteLine();
+        }
+
+        private void AddLogging()
+        {
+            using (var context = new BooksContext())
+            {
+                IServiceProvider provider = context.GetInfrastructure<IServiceProvider>();
+                ILoggerFactory loggerFactory = provider.GetService<ILoggerFactory>();
+                loggerFactory.AddConsole(LogLevel.Information);
+            }
         }
 
     }
